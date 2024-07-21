@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta
+      name="viewport"
+      content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no"
+    />
+    <meta charset="UTF-8" />
+    <title>使用FormData上传图片</title>
+  </head>
+  <body>
+    <div class="content clearFlex">
+      <form action="" enctype="multipart/form-data">
+        <div class="upImg clearflex">
+          <div class="imgOnloadWrap"></div>
+          <div class="upWrap">
+            <div class="imgWrap">+</div>
+            <div class="fileWrap">
+              <input
+                type="file"
+                accept="image/gif,image/jpeg,image/jpg,image/png,image/svg"
+                onchange="upImg(this)"
+                class="open_picture"
+              />
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+    <button class="upload_btn">确认上传</button>
+  </body>
+
+  <script src="https://cdn.jsdelivr.net/npm/jquery"></script>
+  <script>
+    /*------------------------------上传图片---------------------------*/
+    var imgFile = '';
+    function upImg(obj) {
+      imgFile = obj.files[0];
+      console.log(imgFile);
+      var img = new Image();
+      var fr = new FileReader();
+      fr.onload = function() {
+        var htmlStr = '<div class="upWrap">';
+        htmlStr += '<div class="imgWrap upedImg"><span class="deleteImg">X</span>';
+        htmlStr += '<img src="' + fr.result + '" alt=""  class="selected_img"/>';
+        htmlStr += '</div>';
+        htmlStr += '</div>';
+        $('.imgOnloadWrap').append(htmlStr);
+        obj.value = '';
+      };
+      fr.readAsDataURL(imgFile);
+    }
+
+    /*-----------------------------删除图片------------------------------*/
+    $(document).on('click', '.upedImg .deleteImg', function() {
+      //处理未来事件
+      $(this)
+        .parent()
+        .parent()
+        .remove();
+    });
+
+    /*-----------------------------确认上传------------------------------*/
+    function uploadImg() {
+      var formData = new FormData();
+      formData.append('file', imgFile);
+
+      $.ajax({
+        url: 'http://localhost:8010/api/upload',
+        type: 'POST',
+        cache: false, //上传文件不需要缓存
+        data: formData,
+        headers: {
+          Authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IndlaWxlaSIsImlhdCI6MTYyNzg4MTUyOCwiZXhwIjoxNjI4NDg2MzI4fQ.DiuwBaeJGTWwBoVY_MniX1t7lotUrofXXYL1yOsrOXk'
+        },
+        processData: false, // 告诉jQuery不要去处理发送的数据
+        contentType: false, // 告诉jQuery不要去设置Content-Type请求头
+        success: function(res) {
+          console.log(res);
+          alert('上传成功')
+        },
+        error: function(err) {
+          console.log(err);
+          alert('上传失败')
+        },
+      });
+    }
+
+    $('.upload_btn').click(function(e) {
+      uploadImg()
+    })
+  </script>
+</html>

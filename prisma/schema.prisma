@@ -1,0 +1,117 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+// models
+model User {
+  id Int @id @default(autoincrement())
+
+  userId Int @unique
+
+  // username在不同空间可以相同
+  username String
+
+  fullName String?
+
+  avatar String?
+
+  // sha256 加密
+  password String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("user")
+}
+
+// model Material {
+//   id        Int      @default(autoincrement()) @id
+//   title     String
+//   desc      String?
+//   category  Boolean? @default(false)
+//   authorId  Int?
+
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt
+// }
+
+model Resource {
+  id Int @id @default(autoincrement())
+
+  // 资源类型 svg图标、图片、字体等
+  type Int @db.TinyInt
+
+  // 物料可见性 public所有人都能看到|private只有登录过的并且被授权过的/发布者/团队内部
+  // 默认为私有物料 0-private 1-public
+  visibility Int @default(0) @db.TinyInt
+
+  // 上传的用户
+  ownerId Int
+
+  // 空间码
+  space String?
+
+  // 共享给其他空间，code使用逗号分隔
+  shareSpaces String?
+
+  file File?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("resource")
+}
+
+model File {
+  id Int @id @default(autoincrement())
+
+  // 文件在服务器上存储的名称
+  key String @unique
+
+  // 文件原始名称
+  name String
+
+  // 文件尺寸
+  size BigInt
+
+  // 文件mime type
+  type String
+
+  // 文件存储地址 如果是相对地址为本地文件存储；如果是绝对地址则是minio或其他对象存储服务如oss
+  url String?
+
+  // svg标签内容
+  content String? @db.Text
+
+  resource   Resource @relation(fields: [resourceId], references: [id])
+  resourceId Int      @unique
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("file")
+}
+
+model Tag {
+  id Int @id @default(autoincrement())
+
+  name String
+
+  desc String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("tag")
+}

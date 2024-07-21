@@ -1,0 +1,26 @@
+version: '3.9'
+services:
+  mmp-server:
+    container_name: ${CONTAINER_NAME_PREFIX}-mmp-server
+    image: sam920708/mmp-server:latest
+    volumes:
+    # docker-compose会自动创建mmp-logs文件夹
+      - ./mmp-logs:/app/logs
+    restart: always
+    ports:
+      - '8010'
+    environment:
+      - NODE_ENV=production
+      - PORT=8010
+      - DATABASE_URL=mysql://root:${MYSQL_ROOT_PASSWORD}@mysql:3306/mmp
+      - MINIO_ENDPOINT=minio
+      - MINIO_PORT=9000
+      - METACODE_ENDPOINT=http://metacode-server:8080
+      - MINIO_ACCESS=${MINIO_ACCESS}
+      - MINIO_SECRET=${MINIO_SECRET}
+      - JWT_SECRET=${JWT_SECRET}
+    networks:
+      - metacode
+    depends_on:
+      mysql:
+        condition: service_healthy
