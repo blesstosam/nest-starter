@@ -3,7 +3,6 @@ import { User } from '@prisma/client'
 import { Transform } from 'class-transformer'
 import * as sha256 from 'crypto-js/sha256'
 import { IsInt } from 'class-validator'
-import { METACODE_ENDPOINT_FE } from 'src/common/constants'
 import { BastQueryDto } from '../common/base-query.dto'
 
 export class CreateUserDto {
@@ -75,7 +74,7 @@ export class UserDto implements Partial<User> {
     this.userId = user.userId
     this.username = user.username
     this.fullName = user.fullName
-    this.avatar = METACODE_ENDPOINT_FE + user.avatar
+    this.avatar = user.avatar
     this.createdAt = user.createdAt
     this.updatedAt = user.updatedAt
   }

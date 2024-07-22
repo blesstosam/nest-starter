@@ -57,7 +57,7 @@ async function bootstrap() {
   app.useGlobalFilters(new AllExceptionsFilter())
 
   // 添加全局日志
-  app.useGlobalInterceptors(new LoggingInterceptor())
+  app.useGlobalInterceptors(new LoggingInterceptor(), new BigIntInterceptor())
 
   app.useGlobalPipes(new ValidationPipe({ transform: true }))
 

@@ -2,7 +2,7 @@ name: Deploy
 
 on:
   push:
-    branches: [ master ]
+    branches: [ your branch ]
 
 jobs:
   docker:
@@ -39,6 +39,6 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           command_timeout: 5m
           script: |
-            cd /opt/metacode-quickstart
+            cd /your/dir
             docker-compose pull
             docker-compose up -d

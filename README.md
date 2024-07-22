@@ -7,6 +7,10 @@ nestjs(base fastify)<br>
 mysql+prisma<br>
 [prisma docs](https://www.prisma.io/docs/orm)
 
+### db migrate
+1. touch file .env and set DATABASE_URL=xxx
+2. exec `npx prisma migrate deploy`
+
 ### logger
 pino<br>
 [pino docs](https://getpino.io/#/)
@@ -20,4 +24,3 @@ docker or docker-compose
 
 ### package manager
 pnpm@8
-
