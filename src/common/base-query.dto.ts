@@ -10,7 +10,7 @@ export function parseIntPipe({ value }) {
   return val
 }
 
-export class BastQueryDto {
+export class BaseQueryDto {
   @ApiProperty({ description: '模糊搜索', example: '', required: false })
   keyword?: string
 

@@ -3,7 +3,7 @@ import { User } from '@prisma/client'
 import { Transform } from 'class-transformer'
 import * as sha256 from 'crypto-js/sha256'
 import { IsInt } from 'class-validator'
-import { BastQueryDto } from '../common/base-query.dto'
+import { BaseQueryDto } from '../common/base-query.dto'
 
 export class CreateUserDto {
   @ApiProperty({ example: 1 })
@@ -45,7 +45,7 @@ export class CreateUserDto {
 
 export class UpdateUserDto extends PartialType(CreateUserDto) {}
 
-export class QueryUserDto extends BastQueryDto {}
+export class QueryUserDto extends BaseQueryDto {}
 
 export class UserDto implements Partial<User> {
   @ApiProperty()

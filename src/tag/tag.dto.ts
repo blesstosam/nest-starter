@@ -1,7 +1,7 @@
 import { ApiProperty, PartialType } from '@nestjs/swagger'
 import { Tag } from '@prisma/client'
 import { IsNotEmpty } from 'class-validator'
-import { BastQueryDto } from '../common/base-query.dto'
+import { BaseQueryDto } from '../common/base-query.dto'
 
 export class CreateTagDto {
   @ApiProperty({
@@ -21,7 +21,7 @@ export class CreateTagDto {
 
 export class UpdateTagDto extends PartialType(CreateTagDto) {}
 
-export class QueryTagDto extends BastQueryDto {}
+export class QueryTagDto extends BaseQueryDto {}
 
 export class TagDto implements Tag {
   @ApiProperty()

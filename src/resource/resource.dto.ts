@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger'
 import { IsEnum, IsOptional } from 'class-validator'
-import { BastQueryDto } from 'src/common/base-query.dto'
+import { BaseQueryDto } from 'src/common/base-query.dto'
 import { File, Resource } from '@prisma/client'
 import { getInstance } from 'src/minio'
 import { BadRequestException } from '@nestjs/common'
@@ -44,7 +44,7 @@ export class CreateResourceDto {
   }
 }
 
-export class QueryResourceDto extends BastQueryDto {
+export class QueryResourceDto extends BaseQueryDto {
   @ApiProperty({ description: '资源类型', example: 'Svg', required: false })
   @IsEnum(ResourceType)
   @IsOptional()
