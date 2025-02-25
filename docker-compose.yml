@@ -1,11 +1,11 @@
 version: '3.9'
 services:
-  mmp-server:
-    container_name: ${CONTAINER_NAME_PREFIX}-mmp-server
-    image: sam920708/mmp-server:latest
+  my-server:
+    container_name: ${CONTAINER_NAME_PREFIX}-my-server
+    image: sam920708/nest-starter:latest
     volumes:
-    # docker-compose会自动创建mmp-logs文件夹
-      - ./mmp-logs:/app/logs
+    # docker-compose会自动创建宿主机文件夹
+      - ./my-logs:/app/logs
     restart: always
     ports:
       - '8010'
