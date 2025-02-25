@@ -23,4 +23,4 @@ minio<br>
 docker or docker-compose
 
 ### package manager
-pnpm@8
+pnpm
