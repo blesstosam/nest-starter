@@ -2,7 +2,7 @@ name: Deploy
 
 on:
   push:
-    branches: [ your branch ]
+    branches: [ master ]
 
 jobs:
   docker:
@@ -25,20 +25,20 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           push: true
-          tags: sam920708/mmp-server:latest
+          tags: sam920708/nest-starter:latest
 
-  deploy:
-    needs: [ docker ]
-    runs-on: ubuntu-latest
-    steps:
-      - name: Deploy Docker Image
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.SSH_USER }}
-          key: ${{ secrets.SSH_KEY }}
-          command_timeout: 5m
-          script: |
-            cd /your/dir
-            docker-compose pull
-            docker-compose up -d
+  # deploy:
+  #   needs: [ docker ]
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Deploy Docker Image
+  #       uses: appleboy/ssh-action@master
+  #       with:
+  #         host: ${{ secrets.HOST }}
+  #         username: ${{ secrets.SSH_USER }}
+  #         key: ${{ secrets.SSH_KEY }}
+  #         command_timeout: 5m
+  #         script: |
+  #           cd /your/dir
+  #           docker-compose pull
+  #           docker-compose up -d

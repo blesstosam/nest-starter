@@ -30,6 +30,6 @@ import { getInstance } from './minio'
 })
 export class AppModule implements OnApplicationBootstrap {
   async onApplicationBootstrap() {
-    await getInstance().ensureBucket()
+    // await getInstance().ensureBucket()
   }
 }

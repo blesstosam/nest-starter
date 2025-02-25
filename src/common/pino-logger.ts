@@ -2,7 +2,7 @@ import { join } from 'node:path'
 import { ConsoleLogger } from '@nestjs/common'
 import pino, { Logger } from 'pino'
 import PinoHttp, { HttpLogger } from 'pino-http'
-import { ensureFileSync } from 'fs-extra'
+import { ensureDir } from 'fs-extra'
 
 export function getCurrentTime() {
   return new Date().toLocaleString('en-US', {
@@ -12,13 +12,17 @@ export function getCurrentTime() {
   })
 }
 
-// TODO 文件过大时候轮转
 // https://juejin.cn/post/7335245199109455908
 // https://github.com/pinojs/pino/issues/1323
 
 // --------------- error  |  warn  |  log   |  debug  |  verbose
 // --------------- 50     | 40     | 30     | 20      |  10
 type PinoLevels = 'error' | 'warn' | 'info' | 'debug' | 'trace'
+
+const LogOptions = {
+  frequency: 'daily',
+  dateFormat: 'yyyy-MM-dd',
+}
 
 export class PinoLogger extends ConsoleLogger {
   private logger: Logger
@@ -30,20 +34,19 @@ export class PinoLogger extends ConsoleLogger {
     const errorPath = join(__dirname, '../../logs/error.log')
     const combinedPath = join(__dirname, '../../logs/combined.log')
 
-    ensureFileSync(errorPath)
-    ensureFileSync(combinedPath)
+    ensureDir(join(__dirname, '../../logs'))
 
     this.logger = pino({ level: logLevel }, pino.transport({
       targets: [
         {
-          target: 'pino/file',
+          target: 'pino-roll',
           level: 'error',
-          options: { destination: errorPath },
+          options: { file: errorPath, ...LogOptions },
         },
         {
-          target: 'pino/file',
+          target: 'pino-roll',
           level: logLevel,
-          options: { destination: combinedPath },
+          options: { file: combinedPath, ...LogOptions },
         },
         {
           target: process.env.NODE_ENV === 'production' ? 'pino/file' : 'pino-pretty',
@@ -55,8 +58,8 @@ export class PinoLogger extends ConsoleLogger {
     }))
 
     this.httpLogger = PinoHttp({ level: logLevel }, pino.transport({
-      target: 'pino/file',
-      options: { destination: combinedPath },
+      target: 'pino-roll',
+      options: { file: combinedPath, ...LogOptions },
     }))
   }
 
