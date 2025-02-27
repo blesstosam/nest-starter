@@ -28,14 +28,14 @@ export class AccessTokenStrategy extends PassportStrategy(Strategy, 'accessToken
 
         // 请求userinfo接口 如果报错不返回
         // 查找数据库user 如果找不到 创建用户 返回用户；如果找到 直接返回用户
-        const localUser = await this.prisma.user.findFirst({ where: { userId: res.data.userId } })
+        const localUser = await this.prisma.user.findFirst({ where: { thirdPartyUserId: res.data.userId } })
         if (localUser) {
           return localUser
         }
 
         const { userId, username, fullName, avatar, password } = res.data
         const createUserDto = new CreateUserDto({
-          userId,
+          thirdPartyUserId: userId,
           username,
           fullName,
           avatar,

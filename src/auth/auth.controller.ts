@@ -24,7 +24,7 @@ export class AuthController {
     if (existUser) {
       return {
         ...new UserDto(existUser),
-        token: this.jwtService.sign({ userId: existUser.userId }),
+        token: this.jwtService.sign({ userId: existUser.id }),
       }
     }
 
@@ -40,7 +40,7 @@ export class AuthController {
 
       const { userId, username, fullName, avatar, password } = res.data
       const createUserDto = new CreateUserDto({
-        userId,
+        thirdPartyUserId: userId,
         username,
         fullName,
         avatar,

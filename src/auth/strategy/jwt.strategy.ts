@@ -18,7 +18,7 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
   // validate 返回的数据继续向下传递 这里会传递到 router handler - 挂在 req.user 上
   async validate({ userId }: { userId: number }) {
     if (userId) {
-      const user = await this.prisma.user.findFirst({ where: { userId } })
+      const user = await this.prisma.user.findFirst({ where: { id: userId } })
       if (user) {
         return user
       }

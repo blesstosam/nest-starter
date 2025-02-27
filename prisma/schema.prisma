@@ -17,7 +17,8 @@ datasource db {
 model User {
   id Int @id @default(autoincrement())
 
-  userId Int @unique
+  // 第三方平台登录的userId
+  thirdPartyUserId Int? @unique
 
   // username在不同空间可以相同
   username String
@@ -34,17 +35,6 @@ model User {
 
   @@map("user")
 }
-
-// model Material {
-//   id        Int      @default(autoincrement()) @id
-//   title     String
-//   desc      String?
-//   category  Boolean? @default(false)
-//   authorId  Int?
-
-//   createdAt DateTime @default(now())
-//   updatedAt DateTime @updatedAt
-// }
 
 model Resource {
   id Int @id @default(autoincrement())

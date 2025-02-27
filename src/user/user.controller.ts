@@ -34,7 +34,7 @@ export class UserController {
         where,
         select: {
           id: true,
-          userId: true,
+          thirdPartyUserId: true,
           username: true,
           fullName: true,
           avatar: true,
@@ -54,7 +54,7 @@ export class UserController {
   async findOne(@Param('id', ParseIntPipe) id: number) {
     const res = await this.selfService.findUnique({ id }, {
       id: true,
-      userId: true,
+      thirdPartyUserId: true,
       username: true,
       fullName: true,
       avatar: true,

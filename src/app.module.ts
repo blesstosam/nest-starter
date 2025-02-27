@@ -4,7 +4,6 @@ import { ServeStaticModule } from '@nestjs/serve-static'
 import { AppController } from './app.controller'
 import { AppService } from './app.service'
 import { UserModule } from './user/user.module'
-import { MaterialModule } from './material/material.module'
 import { ResourceModule } from './resource/resource.module'
 import { FileModule } from './file/file.module'
 import { AuthModule } from './auth/auth.module'
@@ -20,7 +19,6 @@ import { getInstance } from './minio'
     }),
     AuthModule,
     UserModule,
-    MaterialModule,
     ResourceModule,
     FileModule,
     TagModule,
