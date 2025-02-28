@@ -1,10 +1,14 @@
-import { Body, Controller, HttpException, InternalServerErrorException, Logger, Post } from '@nestjs/common'
+import { Body, Controller, HttpException, InternalServerErrorException, Logger, Post, UseGuards } from '@nestjs/common'
 import { ApiOkResponse, ApiTags } from '@nestjs/swagger'
 import { HttpService } from '@nestjs/axios'
 import { JwtService } from '@nestjs/jwt'
 import { UserService } from 'src/user/user.service'
 import { CreateUserDto, UserDto } from 'src/user/user.dto'
+import { AuthGuard } from '@nestjs/passport'
+import { CurrentUser } from 'src/common/decorators/current-user.decorator'
+import { User } from '@prisma/client'
 import { LoginResDto, LoginUserDto } from './auth.dto'
+import { AuthService } from './auth.service'
 
 @ApiTags('鉴权')
 @Controller('auth')
@@ -15,20 +19,19 @@ export class AuthController {
     private httpService: HttpService,
     private jwtService: JwtService,
     private userService: UserService,
+    private selfService: AuthService,
   ) {}
 
+  @UseGuards(AuthGuard(['local']))
   @Post('login')
   @ApiOkResponse({ type: LoginResDto })
-  async login(@Body() body: LoginUserDto): Promise<LoginResDto> {
-    const existUser = await this.userService.findOne({ username: body.username })
-    if (existUser) {
-      return {
-        ...new UserDto(existUser),
-        userId: existUser.id,
-        token: this.jwtService.sign({ userId: existUser.id }),
-      }
-    }
+  async login(@Body() body: LoginUserDto, @CurrentUser() user: User): Promise<LoginResDto> {
+    return this.selfService.login(user)
+  }
 
+  @Post('login/third')
+  @ApiOkResponse({ type: LoginResDto })
+  async loginByThird(@Body() body: LoginUserDto): Promise<LoginResDto> {
     try {
       const res = await this.httpService.axiosRef({
         url: `${process.env.METACODE_ENDPOINT}/api/login`,
