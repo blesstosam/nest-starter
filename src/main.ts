@@ -59,7 +59,7 @@ async function bootstrap() {
 
   await app.listen(PORT, '0.0.0.0')
 
-  logger.log(`listening http://localhost:${PORT}/api`)
+  logger.log(`listening http://localhost:${PORT}/api`, 'main')
 }
 
 bootstrap()

@@ -5,6 +5,7 @@ import { nanoid } from 'nanoid'
 import { CurrentUser } from 'src/common/decorators/current-user.decorator'
 import { User } from '@prisma/client'
 import { AuthGuard } from '@nestjs/passport'
+import { API_PREFIX } from 'src/common/constants'
 import { SpacecodeHeader } from '../common/decorators/spacecode-header.decorator'
 import { ApiPageResponse } from '../common/decorators/api-page-response.decorator'
 import { getInstance } from '../minio'
@@ -122,17 +123,16 @@ export class ResourceController {
     // 如果是其他 上传到minio 再写一条file
     await this.minio.putObject(fileObj.key, buf)
 
+    const url = `/files/fetch/${fileObj.key}`
     await this.fileService.create({
       ...fileObj,
       size: buf.length,
-      url: this.minio.genFileUrl(fileObj.key),
+      url,
       resource: {
         connect: { id: res.id },
       },
     })
 
-    const signedUrl = await this.minio.presignedUrl(fileObj.key)
-
-    return { ...res, url: signedUrl }
+    return { ...res, url: API_PREFIX + url }
   }
 }

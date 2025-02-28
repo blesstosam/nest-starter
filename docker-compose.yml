@@ -13,12 +13,12 @@ services:
       - NODE_ENV=production
       - PORT=8010
       - DATABASE_URL=mysql://root:${MYSQL_ROOT_PASSWORD}@mysql:3306/mmp
+      - JWT_SECRET=${JWT_SECRET}
       - MINIO_ENDPOINT=minio
       - MINIO_PORT=9000
-      - METACODE_ENDPOINT=http://metacode-server:8080
       - MINIO_ACCESS=${MINIO_ACCESS}
       - MINIO_SECRET=${MINIO_SECRET}
-      - JWT_SECRET=${JWT_SECRET}
+      - METACODE_ENDPOINT=http://metacode-server:8080
     networks:
       - metacode
     depends_on:

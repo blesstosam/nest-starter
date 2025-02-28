@@ -40,5 +40,5 @@ jobs:
   #         command_timeout: 5m
   #         script: |
   #           cd /your/dir
-  #           docker-compose pull
+  #           docker-compose pull --ignore-pull-failures
   #           docker-compose up -d

@@ -42,7 +42,7 @@ export class TagController {
   async findOne(@Param('id', ParseIntPipe) id: number) {
     const res = await this.selfService.findUnique({ id })
     if (!res) {
-      throw new NotFoundException(`Could not find users with ${id}.`)
+      throw new NotFoundException(`Could not find tag with ${id}.`)
     }
     return res
   }

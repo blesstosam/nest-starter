@@ -2,8 +2,8 @@ import { ApiProperty } from '@nestjs/swagger'
 import { IsEnum, IsOptional } from 'class-validator'
 import { BaseQueryDto } from 'src/common/base-query.dto'
 import { File, Resource } from '@prisma/client'
-import { getInstance } from 'src/minio'
 import { BadRequestException } from '@nestjs/common'
+import { API_PREFIX } from 'src/common/constants'
 
 export enum ResourceType {
   Svg = 'Svg',
@@ -100,11 +100,9 @@ export class ResourceListDto {
   }
 
   async buildList() {
-    const urls: string[] = await Promise.all(
-      this.data.map(i => i.url
-        ? getInstance().presignedUrlFromUri(i.url)
-        : Promise.resolve(null)),
-    )
+    const urls: string[] = this.data.map(i => i.url
+      ? API_PREFIX + i.url
+      : null)
     const res = this.data.map((i, index) => ({ ...i, url: urls[index] }))
     return res
   }

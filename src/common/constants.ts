@@ -1,6 +1,6 @@
 // jwt token 过期时间
 export const TOKEN_EXPIRES_IN = '30d'
 
-// 返回给前端的minio地址 后台使用的localhost
-export const MINIO_ENDPOINT_FE = 'minio-api.wetech.tech'
 export const MINIO_BUCKET = 'mmp'
+
+export const API_PREFIX = '/api'

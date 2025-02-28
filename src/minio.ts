@@ -1,7 +1,7 @@
 import * as stream from 'node:stream'
 import * as Minio from 'minio'
 import { Logger } from '@nestjs/common'
-import { MINIO_BUCKET, MINIO_ENDPOINT_FE } from './common/constants'
+import { MINIO_BUCKET } from './common/constants'
 
 export class MinioHelper {
   private logger = new Logger('MinioHelper')
@@ -53,18 +53,12 @@ export class MinioHelper {
     await this.client.putObject(this.bucket, destination, stream)
   }
 
+  async getFileStream(filename: string) {
+    return this.client.getObject(this.bucket, filename)
+  }
+
   genFileUrl(filekey: string) {
     return `${this.useSSL ? 'https' : 'http'}://${process.env.MINIO_ENDPOINT}/${this.bucket}/${filekey}`
-  }
-
-  async presignedUrl(filekey: string) {
-    const url = await this.client.presignedUrl('GET', this.bucket, filekey, 24 * 60 * 60)
-    return url.replace(process.env.MINIO_ENDPOINT, MINIO_ENDPOINT_FE)
-  }
-
-  async presignedUrlFromUri(uri: string) {
-    const fileKey = uri.split('/').pop()
-    return this.presignedUrl(fileKey)
   }
 }
 

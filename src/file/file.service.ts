@@ -6,7 +6,7 @@ import { PrismaService } from '../prisma.service'
 export class FileService {
   constructor(private prisma: PrismaService) {}
 
-  async findOne(
+  async findUnique(
     whereUniqueInput: Prisma.FileWhereUniqueInput,
   ): Promise<File | null> {
     return this.prisma.file.findUnique({
