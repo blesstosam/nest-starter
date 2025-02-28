@@ -22,6 +22,10 @@ export class LoginUserDto {
 }
 
 export class LoginResDto extends UserDto {
+  // user.id的别名
+  @ApiProperty()
+  userId: number
+
   @ApiProperty()
   token: string
 }

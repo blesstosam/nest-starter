@@ -2,9 +2,13 @@
 
 ### start
 1. pnpm install
-1. touch file .env and set `DATABASE_URL=xxx`
-2. exec `npx prisma generate`
-3. exec `pnpm run start:dev`
+2. touch file .env and set config
+```shell
+DATABASE_URL=xxx
+JWT_SECRET=xxx
+```
+3. exec `npx prisma generate`
+4. exec `pnpm run start:dev`
 
 
 ### framework

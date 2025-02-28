@@ -3,7 +3,6 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger'
 import { ValidationPipe } from '@nestjs/common'
 import * as dotenv from 'dotenv'
 import { FastifyAdapter, NestFastifyApplication } from '@nestjs/platform-fastify'
-// import formbody from '@fastify/formbody'
 import FastifyMultipart from '@fastify/multipart'
 import { AppModule } from './app.module'
 import { AllExceptionsFilter } from './common/http-exception.filter'
@@ -28,11 +27,6 @@ async function bootstrap() {
     },
   )
 
-  // app.register(formbody, {
-  //   bodyLimit: 1024 * 1024 * 50,
-  // })
-
-  // @ts-expect-error
   app.register(FastifyMultipart, {
     limits: {
       fieldSize: 1024 * 1204 * 50,

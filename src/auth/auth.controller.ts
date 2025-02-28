@@ -24,6 +24,7 @@ export class AuthController {
     if (existUser) {
       return {
         ...new UserDto(existUser),
+        userId: existUser.id,
         token: this.jwtService.sign({ userId: existUser.id }),
       }
     }
@@ -51,6 +52,7 @@ export class AuthController {
 
       return {
         ...new UserDto(user),
+        userId: res.data.userId,
         token: this.jwtService.sign({ userId: res.data.userId }),
       }
     }

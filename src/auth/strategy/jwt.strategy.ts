@@ -11,7 +11,8 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       secretOrKey: process.env.JWT_SECRET,
       ignoreExpiration: false,
-    } as StrategyOptions)
+      algorithms: ['HS256'],
+    })
   }
 
   // 该 id 为 constructor 执行完传递过来的
