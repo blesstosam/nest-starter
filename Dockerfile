@@ -1,4 +1,4 @@
-FROM node:20-alpine AS base
+FROM node:20-alpine3.18 AS base
 
 RUN npm i -g pnpm@9.8.0
 
