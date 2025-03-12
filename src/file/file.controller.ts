@@ -5,7 +5,7 @@ import { getInstance } from '../minio'
 import { FileService } from './file.service'
 
 @ApiTags('文件')
-@Controller('files')
+@Controller('file')
 export class FileController {
   private minio = getInstance()
 

@@ -55,7 +55,8 @@ model Resource {
   // 共享给其他空间，code使用逗号分隔
   shareSpaces String?
 
-  file File?
+  file   File @relation(fields: [fileId], references: [id])
+  fileId Int  @unique
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -84,8 +85,7 @@ model File {
   // svg标签内容
   content String? @db.Text
 
-  resource   Resource @relation(fields: [resourceId], references: [id])
-  resourceId Int      @unique
+  resource Resource?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

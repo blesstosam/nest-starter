@@ -5,10 +5,10 @@ import { AuthGuard } from '@nestjs/passport'
 import { UserService } from './user.service'
 import { CreateUserDto, QueryUserDto, UpdateUserDto, UserDto } from './user.dto'
 
-@ApiTags('users')
+@ApiTags('用户')
 @ApiBearerAuth()
 @UseGuards(AuthGuard('jwt'))
-@Controller('users')
+@Controller('user')
 export class UserController {
   constructor(
     private readonly selfService: UserService,

@@ -6,6 +6,7 @@ import { CurrentUser } from 'src/common/decorators/current-user.decorator'
 import { User } from '@prisma/client'
 import { AuthGuard } from '@nestjs/passport'
 import { API_PREFIX } from 'src/common/constants'
+import { FileDto } from 'src/file/file.dto'
 import { SpacecodeHeader } from '../common/decorators/spacecode-header.decorator'
 import { ApiPageResponse } from '../common/decorators/api-page-response.decorator'
 import { getInstance } from '../minio'
@@ -13,9 +14,9 @@ import { CreateResourceDto, QueryResourceDto, ResourceDto, ResourceListDto, Reso
 import { ResourceService } from './resource.service'
 
 @ApiTags('资源')
-@ApiBearerAuth()
+// @ApiBearerAuth()
 // jwt和accessToken的顺序不能动 否则报错 why？
-@UseGuards(AuthGuard(['jwt', 'accessToken']))
+// @UseGuards(AuthGuard(['jwt', 'accessToken']))
 @Controller('resource')
 export class ResourceController {
   private logger = new Logger('ResourceController')
@@ -100,39 +101,36 @@ export class ResourceController {
 
     const createDto = new CreateResourceDto(dto)
 
+    let fileRes: FileDto
     // 如果是svg 写一条file即可
+    if (createDto.type === ResourceType.Svg) {
+      fileRes = await this.fileService.create({
+        ...fileObj,
+        size: buf.length,
+        content: buf.toString('utf8'),
+      })
+    }
+    else {
+    // 如果是其他 上传到minio 再写一条file
+      await this.minio.putObject(fileObj.key, buf)
+
+      const url = `/files/fetch/${fileObj.key}`
+      fileRes = await this.fileService.create({
+        ...fileObj,
+        size: buf.length,
+        url,
+      })
+    }
+
     const res = await this.selfService.create({
       type: createDto.typeForDB,
       space: spaceCode,
       ownerId: user.id,
-    })
-
-    if (createDto.type === ResourceType.Svg) {
-      const fileRes = await this.fileService.create({
-        ...fileObj,
-        size: buf.length,
-        content: buf.toString('utf8'),
-        resource: {
-          connect: { id: res.id },
-        },
-      })
-
-      return { ...res, content: fileRes.content }
-    }
-
-    // 如果是其他 上传到minio 再写一条file
-    await this.minio.putObject(fileObj.key, buf)
-
-    const url = `/files/fetch/${fileObj.key}`
-    await this.fileService.create({
-      ...fileObj,
-      size: buf.length,
-      url,
-      resource: {
-        connect: { id: res.id },
+      file: {
+        connect: { id: fileRes.id },
       },
     })
 
-    return { ...res, url: API_PREFIX + url }
+    return { ...res, file: fileRes }
   }
 }

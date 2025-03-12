@@ -56,10 +56,6 @@ export class MinioHelper {
   async getFileStream(filename: string) {
     return this.client.getObject(this.bucket, filename)
   }
-
-  genFileUrl(filekey: string) {
-    return `${this.useSSL ? 'https' : 'http'}://${process.env.MINIO_ENDPOINT}/${this.bucket}/${filekey}`
-  }
 }
 
 let instance: MinioHelper

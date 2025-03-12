@@ -5,7 +5,7 @@ import { TagService } from './tag.service'
 import { CreateTagDto, QueryTagDto, TagDto, UpdateTagDto } from './tag.dto'
 
 @ApiTags('标签')
-@Controller('tags')
+@Controller('tag')
 export class TagController {
   constructor(
     private readonly selfService: TagService,
@@ -63,8 +63,8 @@ export class TagController {
   @ApiOkResponse({ type: TagDto })
   update(
     @Param('id', ParseIntPipe) id: number,
-    @Body() updateUserDto: UpdateTagDto,
+    @Body() updateDto: UpdateTagDto,
   ) {
-    return this.selfService.update({ where: { id }, data: updateUserDto })
+    return this.selfService.update({ where: { id }, data: updateDto })
   }
 }
