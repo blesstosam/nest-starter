@@ -14,13 +14,11 @@ import { CreateResourceDto, QueryResourceDto, ResourceDto, ResourceListDto, Reso
 import { ResourceService } from './resource.service'
 
 @ApiTags('资源')
-// @ApiBearerAuth()
+@ApiBearerAuth()
 // jwt和accessToken的顺序不能动 否则报错 why？
-// @UseGuards(AuthGuard(['jwt', 'accessToken']))
+@UseGuards(AuthGuard(['jwt', 'accessToken']))
 @Controller('resource')
 export class ResourceController {
-  private logger = new Logger('ResourceController')
-
   private minio = getInstance()
 
   constructor(

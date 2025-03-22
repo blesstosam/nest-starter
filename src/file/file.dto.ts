@@ -2,7 +2,6 @@ import { ApiProperty } from '@nestjs/swagger'
 import { File } from '@prisma/client'
 
 export class FileDto implements File {
-  content: string
   @ApiProperty()
   id: number
 
@@ -20,6 +19,9 @@ export class FileDto implements File {
 
   @ApiProperty()
   url: string
+
+  @ApiProperty()
+  content: string
 
   @ApiProperty()
   createdAt: Date

@@ -7,3 +7,5 @@ export class PrismaService extends PrismaClient implements OnModuleInit {
     await this.$connect()
   }
 }
+
+// 增加全局 prisma module

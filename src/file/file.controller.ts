@@ -1,8 +1,11 @@
-import { Controller, Get, NotFoundException, Param, Res } from '@nestjs/common'
+import { Controller, Get, NotFoundException, Param, Query, Res } from '@nestjs/common'
 import { ApiTags } from '@nestjs/swagger'
 import { FastifyReply } from 'fastify'
+import { BaseQueryDto } from 'src/common/base-query.dto'
+import { ApiPageResponse } from 'src/common/decorators/api-page-response.decorator'
 import { getInstance } from '../minio'
 import { FileService } from './file.service'
+import { FileDto } from './file.dto'
 
 @ApiTags('文件')
 @Controller('file')
@@ -14,8 +17,18 @@ export class FileController {
   ) {}
 
   @Get()
-  findAll() {
-    return []
+  @ApiPageResponse({ type: FileDto })
+  async findAll(@Query() query: BaseQueryDto) {
+    const { pageSize, skip } = query
+    const [list, total] = await Promise.all([
+      this.selfService.list({
+        skip,
+        take: pageSize,
+      }),
+      this.selfService.count(),
+    ])
+
+    return { list, total }
   }
 
   @Get('fetch/:key')
@@ -38,7 +51,7 @@ export class FileController {
       .header('Content-Type', fileType)
       .header(
         'Content-Disposition',
-        fileType.startsWith('application/') ? `attachment; filename="${filename}"` : 'inline',
+        fileType.startsWith('application/') ? `attachment; filename*=UTF-8''${globalThis.encodeURIComponent(filename)}` : 'inline',
       )
 
     return res.send(fileStream)

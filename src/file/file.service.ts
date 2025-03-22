@@ -53,4 +53,8 @@ export class FileService {
       where,
     })
   }
+
+  async count(where?: Prisma.FileWhereInput) {
+    return this.prisma.file.count({ where })
+  }
 }
