@@ -1,4 +1,4 @@
-import { Controller, Get, NotFoundException, Param, Query, Res } from '@nestjs/common'
+import { Controller, Get, Logger, NotFoundException, Param, Query, Res } from '@nestjs/common'
 import { ApiTags } from '@nestjs/swagger'
 import { FastifyReply } from 'fastify'
 import { BaseQueryDto } from 'src/common/base-query.dto'
@@ -11,6 +11,7 @@ import { FileDto } from './file.dto'
 @Controller('file')
 export class FileController {
   private minio = getInstance()
+  private logger = new Logger(FileController.name)
 
   constructor(
     private readonly selfService: FileService,
@@ -40,20 +41,29 @@ export class FileController {
       throw new NotFoundException(`Could not find file ${key}.`)
     }
 
-    // ddyGOG58ak_#screenshot-20240318-110736.png
-    // http://localhost:8010/api/files/fetch/ddyGOG58ak_%23screenshot-20240318-110736.png
-
     const fileStream = await this.minio.getFileStream(key)
     const fileType = file.type
     const filename = file.name
 
-    res
-      .header('Content-Type', fileType)
-      .header(
-        'Content-Disposition',
-        fileType.startsWith('application/') ? `attachment; filename*=UTF-8''${globalThis.encodeURIComponent(filename)}` : 'inline',
-      )
+    // TODO 测试 https://docs.nestjs.com/techniques/streaming-files#streamable-file-class
 
-    return res.send(fileStream)
+    // 使用promise包一层能解决偶尔报错问题
+    // https://github.com/fastify/fastify/discussions/4764
+    // https://github.com/fastify/fastify/issues/3994
+    return new Promise((resolve, reject) => {
+      res
+        .header('Content-Type', fileType)
+        .header(
+          'Content-Disposition',
+          fileType.startsWith('application/') ? `attachment; filename*=UTF-8''${encodeURIComponent(filename)}` : 'inline',
+        )
+
+      // 处理文件流错误
+      fileStream.on('error', (err) => {
+        this.logger.error('文件流错误:', err)
+        reject(err)
+      })
+      return res.send(fileStream)
+    })
   }
 }

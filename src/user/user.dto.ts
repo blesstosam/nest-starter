@@ -2,7 +2,6 @@ import { ApiProperty, PartialType } from '@nestjs/swagger'
 import { User } from '@prisma/client'
 import { Transform } from 'class-transformer'
 import * as sha256 from 'crypto-js/sha256'
-import { IsInt } from 'class-validator'
 import { BaseQueryDto } from '../common/base-query.dto'
 
 export class CreateUserDto {
@@ -52,10 +51,10 @@ export class UserDto implements Partial<User> {
   @ApiProperty()
   username: string
 
-  @ApiProperty({ required: false, nullable: true })
+  @ApiProperty()
   fullName: string
 
-  @ApiProperty({ required: false, nullable: true })
+  @ApiProperty()
   avatar: string
 
   @ApiProperty()
