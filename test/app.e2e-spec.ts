@@ -1,13 +1,14 @@
 import type { TestingModule } from '@nestjs/testing'
 import { Test } from '@nestjs/testing'
-import { type INestApplication, ValidationPipe } from '@nestjs/common'
+import { ValidationPipe } from '@nestjs/common'
+import { FastifyAdapter, type NestFastifyApplication } from '@nestjs/platform-fastify'
 import * as request from 'supertest'
 import { useContainer } from 'class-validator'
 import { PrismaService } from '../src/prisma.service'
 import { AppModule } from './../src/app.module'
 
 describe('TagController (e2e)', () => {
-  let app: INestApplication
+  let app: NestFastifyApplication
   let prisma: PrismaService
 
   const tagShape = expect.objectContaining({
@@ -29,7 +30,12 @@ describe('TagController (e2e)', () => {
       imports: [AppModule],
     }).compile()
 
-    app = moduleFixture.createNestApplication()
+    app = moduleFixture.createNestApplication<NestFastifyApplication>(
+      new FastifyAdapter({
+        bodyLimit: 1024 * 1024 * 50,
+      }),
+
+    )
 
     prisma = app.get<PrismaService>(PrismaService)
 
@@ -39,16 +45,17 @@ describe('TagController (e2e)', () => {
     app.setGlobalPrefix('api')
 
     await app.init()
+    await app.getHttpAdapter().getInstance().ready()
 
     await prisma.tag.create({
       data: tag1,
     })
   })
 
-  describe('GET /api/tags', () => {
+  describe('GET /api/tag', () => {
     it('returns a list of tags', async () => {
       const { status, body } = await request(app.getHttpServer())
-        .get('/api/tags')
+        .get('/api/tag')
 
       expect(status).toBe(200)
       expect(body.total).toEqual(1)
@@ -59,10 +66,10 @@ describe('TagController (e2e)', () => {
     })
   })
 
-  describe('GET /api/tags/{id}', () => {
+  describe('GET /api/tag/{id}', () => {
     it('returns a given tag', async () => {
       const { status, body } = await request(app.getHttpServer()).get(
-        `/api/tags/${tag1.id}`,
+        `/api/tag/${tag1.id}`,
       )
 
       expect(status).toBe(200)
@@ -72,7 +79,7 @@ describe('TagController (e2e)', () => {
 
     it('fails to return non existing tag', async () => {
       const { status } = await request(app.getHttpServer()).get(
-        `/api/tags/100`,
+        `/api/tag/100`,
       )
 
       expect(status).toBe(404)
@@ -80,19 +87,19 @@ describe('TagController (e2e)', () => {
 
     it('fails to return tag with invalid id type', async () => {
       const { status } = await request(app.getHttpServer()).get(
-        `/api/tags/string-id`,
+        `/api/tag/string-id`,
       )
 
       expect(status).toBe(400)
     })
   })
 
-  describe('POST /api/tags', () => {
+  describe('POST /api/tag', () => {
     it('creates an tag', async () => {
       const beforeCount = await prisma.tag.count()
 
       const { status } = await request(app.getHttpServer())
-        .post('/api/tags')
+        .post('/api/tag')
         .send({
           name: 'tag1',
           desc: 'tagdesc1',
