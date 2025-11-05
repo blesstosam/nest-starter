@@ -7,13 +7,10 @@ import { ensureDir } from 'fs-extra'
 export function getCurrentTime() {
   return new Date().toLocaleString('en-US', {
     // https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
-    timeZone: 'Asia/Brunei', // PRC 在chrome里可以，在node里不行
+    timeZone: 'Asia/Brunei',
     hour12: false,
   })
 }
-
-// https://juejin.cn/post/7335245199109455908
-// https://github.com/pinojs/pino/issues/1323
 
 // --------------- error  |  warn  |  log   |  debug  |  verbose
 // --------------- 50     | 40     | 30     | 20      |  10
@@ -22,6 +19,7 @@ type PinoLevels = 'error' | 'warn' | 'info' | 'debug' | 'trace'
 const LogOptions = {
   frequency: 'daily',
   dateFormat: 'yyyy-MM-dd',
+  extension: '.log',
 }
 
 export class PinoLogger extends ConsoleLogger {
@@ -31,8 +29,8 @@ export class PinoLogger extends ConsoleLogger {
   constructor(logLevel: PinoLevels) {
     super()
 
-    const errorPath = join(__dirname, '../../logs/error.log')
-    const combinedPath = join(__dirname, '../../logs/combined.log')
+    const errorPath = join(__dirname, '../../logs/error')
+    const combinedPath = join(__dirname, '../../logs/combined')
 
     ensureDir(join(__dirname, '../../logs'))
 
