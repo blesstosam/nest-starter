@@ -6,8 +6,8 @@ import { FastifyAdapter, NestFastifyApplication } from '@nestjs/platform-fastify
 import FastifyMultipart from '@fastify/multipart'
 import { AppModule } from './app.module'
 import { AllExceptionsFilter } from './common/http-exception.filter'
-import { LoggingInterceptor } from './common/logging.interceptor'
-import { BigIntInterceptor } from './common/big-int.interceptor'
+import { LoggingInterceptor } from './common/interceptors/logging.interceptor'
+import { BigIntInterceptor } from './common/interceptors/big-int.interceptor'
 import { PinoLogger } from './common/pino-logger'
 
 const env = dotenv.config({ path: ['.env'] })
