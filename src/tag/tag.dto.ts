@@ -1,5 +1,5 @@
 import { ApiProperty, PartialType } from '@nestjs/swagger'
-import { Tag } from '@prisma/client'
+import { Tag } from '../generated/prisma/client'
 import { IsNotEmpty } from 'class-validator'
 import { BaseQueryDto } from '../common/base-query.dto'
 

@@ -1,4 +1,4 @@
-FROM node:20-alpine3.18 AS base
+FROM node:24-alpine3.22 AS base
 
 RUN npm i -g pnpm@9.8.0
 
@@ -24,7 +24,7 @@ COPY --from=build /app/ ./
 COPY --from=build /app/node_modules ./node_modules
 
 RUN apk add --no-cache tzdata
-ENV TZ Asia/Shanghai
+ENV TZ=Asia/Shanghai
 
 EXPOSE 8010
 

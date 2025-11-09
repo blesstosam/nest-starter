@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common'
 import { UserService } from 'src/user/user.service'
 import * as sha256 from 'crypto-js/sha256'
-import { User } from '@prisma/client'
+import { User } from '../generated/prisma/client'
 import { UserDto } from 'src/user/user.dto'
 import { JwtService } from '@nestjs/jwt'
 

@@ -6,7 +6,7 @@ import { UserService } from 'src/user/user.service'
 import { CreateUserDto, UserDto } from 'src/user/user.dto'
 import { AuthGuard } from '@nestjs/passport'
 import { CurrentUser } from 'src/common/decorators/current-user.decorator'
-import { User } from '@prisma/client'
+import { User } from '../generated/prisma/client'
 import { LoginResDto, LoginUserDto } from './auth.dto'
 import { AuthService } from './auth.service'
 

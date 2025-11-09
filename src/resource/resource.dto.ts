@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger'
 import { IsEnum, IsOptional } from 'class-validator'
 import { BaseQueryDto } from 'src/common/base-query.dto'
-import { File, Resource } from '@prisma/client'
+import { File, Resource } from '../generated/prisma/client'
 import { BadRequestException } from '@nestjs/common'
 import { API_PREFIX } from 'src/common/constants'
 

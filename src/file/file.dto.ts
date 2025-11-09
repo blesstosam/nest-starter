@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger'
-import { File } from '@prisma/client'
+import { File } from '../generated/prisma/client'
 
 export class FileDto implements File {
   @ApiProperty()

@@ -1,5 +1,5 @@
 import { ApiProperty, PartialType } from '@nestjs/swagger'
-import { User } from '@prisma/client'
+import { User } from '../generated/prisma/client'
 import { Transform } from 'class-transformer'
 import * as sha256 from 'crypto-js/sha256'
 import { BaseQueryDto } from '../common/base-query.dto'

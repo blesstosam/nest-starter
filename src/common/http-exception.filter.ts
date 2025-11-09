@@ -1,5 +1,5 @@
 import { ArgumentsHost, Catch, ExceptionFilter, HttpException, HttpStatus, Logger } from '@nestjs/common'
-import { Prisma } from '@prisma/client'
+import { Prisma } from '../generated/prisma/client'
 import { FastifyReply, FastifyRequest } from 'fastify'
 
 @Catch()

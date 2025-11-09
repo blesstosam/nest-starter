@@ -3,7 +3,7 @@ import { ApiBearerAuth, ApiBody, ApiConsumes, ApiOkResponse, ApiTags } from '@ne
 import { FileService } from 'src/file/file.service'
 import { nanoid } from 'nanoid'
 import { CurrentUser } from 'src/common/decorators/current-user.decorator'
-import { User } from '@prisma/client'
+import { User } from '../generated/prisma/client'
 import { AuthGuard } from '@nestjs/passport'
 import { API_PREFIX } from 'src/common/constants'
 import { FileDto } from 'src/file/file.dto'
