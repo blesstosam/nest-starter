@@ -20,6 +20,10 @@ const LogOptions = {
   frequency: 'daily',
   dateFormat: 'yyyy-MM-dd',
   extension: '.log',
+  limit: {
+    count: 30, // 保留最近30个日志文件
+  },
+  size: '10m', // 单个日志文件最大尺寸
 }
 
 export class PinoLogger extends ConsoleLogger {

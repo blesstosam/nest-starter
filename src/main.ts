@@ -6,7 +6,6 @@ import { FastifyAdapter, NestFastifyApplication } from '@nestjs/platform-fastify
 import FastifyMultipart from '@fastify/multipart'
 import { AppModule } from './app.module'
 import { AllExceptionsFilter } from './common/http-exception.filter'
-import { LoggingInterceptor } from './common/interceptors/logging.interceptor'
 import { BigIntInterceptor } from './common/interceptors/big-int.interceptor'
 import { PinoLogger } from './common/pino-logger'
 
@@ -51,7 +50,7 @@ async function bootstrap() {
   app.useGlobalFilters(new AllExceptionsFilter())
 
   // 添加全局日志
-  app.useGlobalInterceptors(new LoggingInterceptor(), new BigIntInterceptor())
+  app.useGlobalInterceptors(new BigIntInterceptor())
 
   app.useGlobalPipes(new ValidationPipe({ transform: true }))
 
